@@ -1,0 +1,33 @@
+% +++++++++++++++++++++++++++++++++++++++++++++ CONFIGURATION ++++++++++++++++++++++++++++++++++++++++
+% use and configure Beamer
+%\documentclass[unknownkeysallowed,xcolor=table]{beamer}
+\documentclass[unknownkeysallowed,show notes,xcolor=table]{beamer}
+\usetheme{Warsaw}
+% custom packages (contain all required usepackage's)
+\usepackage{styles/presentation}
+% document settings
+\pdfinfo {
+  /Title       (My Project's Title -- A Nice Subtitle)
+  /Author      (Doe, John)
+}
+% heading slide
+\title[A Nice Title for the Upper Banner]{A Nice Title}
+\subtitle{\scriptsize A Nice Subtitle}
+\author{John Doe}
+\institute{\vspace{-1em} \includegraphics[width=3cm]{logo1.png}}
+\date{\tiny Jan 01st 2000}
+% ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+\begin{document}
+  \include{parts/hyperlinks}
+  \titleandoutline
+  % actual content
+  \include{sections/introduction}
+  \include{sections/background}
+  \include{sections/framework}
+  \include{sections/experiments}
+  \include{sections/conclusion}
+  % supporting literature
+  \appendices
+  \include{parts/references}
+  \include{parts/appendices}
+\end{document}

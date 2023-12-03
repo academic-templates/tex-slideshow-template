@@ -1,0 +1,112 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{styles/customframe}[2016/08/26 Custom frame package]
+\RequirePackage{tikz}
+\RequirePackage{xstring}
+\RequirePackage{titleps}
+\RequirePackage{totcount}
+% setting for timeline
+\usetikzlibrary{overlay-beamer-styles}
+\tikzset{highlight on/.style={alt={#1{fill=blue!80!black,color=blue!80!black}{fill=blue!20,color=blue!20}}}}
+\newcommand{\timeline}[2][2000]{
+  \vspace{-.5cm}
+  \begin{tikzpicture}[scale=0.52, every node/.style={scale=0.65}]
+  \draw[line width=1mm,-latex,blue!20] (-0.2,0) -- (20+0.2,0);
+  \foreach \X [evaluate=\X as \Y using int(\X-#1),count=\Z] in {#2}
+  {\draw[highlight on=<\Z>] ({\Y-0.2},-0.5) -- ({\Y+0.2},-0.5) -- (\Y,-0.1) -- cycle;
+   \node[anchor=south,highlight on=<\Z>,rotate=45,fill=white,anchor=south
+   west,inner sep=0pt] at (\Y,0.2) {\X};}
+  \end{tikzpicture}}
+% define a new environment for reducing code length
+\global\def\tmpsubsectiontitle{none}
+\newenvironment{myframe}[3][c]{
+  \IfStrEq{#2}{\tmpsubsectiontitle}{}{\subsection{#2}}
+  \global\def\tmpsubsectiontitle{#2}
+  \begin{frame}[#1]
+    \frametitle{#2}
+    \framesubtitle{#3}
+}{\end{frame}}
+% question frame
+\newcommand{\questionframe}[1]{
+  \addtocounter{framenumber}{-1}
+  \begin{frame}
+    \frametitle{Questions ?} \framesubtitle{}  
+    \begin{center}
+      \href{#1}{\includegraphics[height=.75\textheight]{questions}}
+    \end{center}
+  \end{frame}
+}
+% addition of a logo to frame title
+%  source: http://tex.stackexchange.com/questions/262318/add-logo-only-on-some-frame-title
+\def\thisframelogos{}
+\newcommand{\framelogo}[1]{\def\thisframelogos{#1}}
+\addtobeamertemplate{frametitle}{}{%
+  \begin{tikzpicture}[remember picture,overlay]
+    \node[anchor=north east,yshift=-28pt] at (current page.north east) {%
+      \foreach \url/\img in \thisframelogos {%
+        \hspace{.5ex}%
+        \ifthenelse{\equal{\url}{}}{\includegraphics[height=.7cm]{\img}}
+          {\href{\url}{\includegraphics[height=.7cm]{\img}}}%
+      }%
+    };
+  \end{tikzpicture}
+}
+% references preamble
+\newcommand{\references}{
+  \renewcommand*{\bibfont}{\scriptsize}
+  \defbibheading{bibliography}[\bibname]{}
+  \appendix
+}
+% reference frame
+\renewcommand*{\bibfont}{\tiny}
+\newcounter{RefPageCounter}
+\newcommand{\refframe}[2]{
+  \stepcounter{RefPageCounter}
+  \begin{frame}
+    \frametitle{References \Roman{RefPageCounter}}
+    \framesubtitle{#1}
+    \begin{textblock*}{\paperwidth-40pt}(15pt,35pt)
+      \setlength\bibitemsep{10pt}
+      \printbibliography[keyword={#2}]
+    \end{textblock*}
+  \end{frame}
+}
+% appendix frame
+\newcounter{AppCounter}
+\newenvironment{appframe}[3][c]{
+  \ifcounter{#3}{}{
+    \newtotcounter{#3}
+    \regtotcounter{#3}
+    \stepcounter{AppCounter}
+    \label{#3}
+  }
+  \stepcounter{#3}
+  \begin{frame}[#1]
+    \frametitle{Appendix \Alph{AppCounter}}
+    \framesubtitle{#2 (\arabic{#3}/\total{#3})}
+}{\end{frame}}
+% appendix reference image
+\newcommand{\appref}[2]{
+  \begin{textblock*}{.8cm}(340pt,60pt)
+    \centering
+    \hyperlink{#1}{\includegraphics[width=.4cm]{help}}
+    \microtiny #2
+  \end{textblock*}
+  \label{appref:frame\insertframenumber}
+  \ifcounter{#1-origin}{}{
+    \newcounter{#1-origin}
+    \setcounter{#1-origin}{\insertframenumber}
+  }
+}
+\newcommand{\appret}[1]{
+  \begin{textblock*}{.5cm}(345pt,9pt)
+    \hyperlink{appref:frame\arabic{#1-origin}}{\includegraphics[width=.4cm]{return}}
+  \end{textblock*}
+}
+% screenshot explained shortcut command for appendices
+\newcommand{\screenshotexplained}[4]{
+  \begin{textblock*}{\paperwidth-40pt-#2}(5pt+#2,35pt)
+    \centering
+    \tcbox[boxsep=1pt,boxrule=1pt]{\includegraphics[width=#1\linewidth]{#3}}
+    \small #4
+  \end{textblock*}
+}

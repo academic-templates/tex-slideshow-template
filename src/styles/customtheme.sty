@@ -1,0 +1,33 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{styles/customtheme}[2016/08/27 Custom theme settings package]
+% tune Warsaw theme
+\usefonttheme{serif}
+\setbeamerfont{title}{size=\huge}
+\setbeamerfont{subtitle}{size=\footnotesize}
+% - overall colors
+\setbeamercolor{structure}{fg=customdarkblue,bg=white}
+\setbeamercolor{titlelike}{bg=customdarkblue}
+\setbeamercolor{normal text}{fg=customdarkblue}
+\setbeamercolor{section in toc}{fg=customdarkblue}
+\setbeamercolor{palette primary}{use=structure,fg=white,bg=structure.fg}
+\setbeamercolor{palette secondary}{use=structure,fg=white,bg=structure.fg!75}
+\setbeamercolor{palette tertiary}{use=structure,fg=white,bg=black}
+\setbeamercolor{palette quaternary}{fg=white,bg=black}
+% - frame header/footer toc
+\setbeamerfont{tiny structure}{size=\supertiny}
+\setbeamerfont{footline}{size=\supertiny}
+\setbeamerfont{author}{size=\footnotesize}
+\setbeamerfont{author in head/foot}{size=\supertiny}
+% - frame title (beneath the top bar with the contents)
+\setbeamerfont{frametitle}{size=\footnotesize,series=\bfseries}
+\setbeamercolor{frametitle}{fg=white,bg=customlightblue}
+% - frame subtitle (beneath the frame title)
+\setbeamerfont{framesubtitle}{size=\scriptsize,series=\normalfont}
+\setbeamercolor{framesubtitle}{fg=white}
+\setbeamerfont{subsection in toc}{size=\scriptsize}
+% - fix the shading of the frame title box
+\makeatletter
+\pgfdeclarehorizontalshading[customlightblue,customlightblue!10]{beamer@frametitleshade}{\paperheight}{%
+  color(0pt)=(black!50!customlightblue);
+  color(\paperwidth)=(customlightblue!10)}
+\makeatother

@@ -1,0 +1,63 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{styles/customblocks}[2016/08/28 Custom slide blocks package]
+\RequirePackage[absolute,overlay]{textpos}
+% define two-columns block
+\newlength{\colwidth}
+\newcommand{\twocolumnsblock}[3]{
+  \vspace{-.5cm}
+  \setlength{\colwidth}{.97\linewidth-#1\linewidth}
+  \begin{tabular}{@{}lr@{}}
+    \begin{minipage}[l]{#1\linewidth} #2 \end{minipage} &
+    \begin{minipage}[r]{\colwidth} #3 \end{minipage} \\
+  \end{tabular}
+}
+% define two-columns block with a central separator
+\newcommand{\twocolumnsblocksep}[4]{
+  \vspace{-.5cm}
+  \setlength{\colwidth}{\linewidth-#1\linewidth-.15\linewidth}
+  \begin{tabular}{@{}l@{}c@{}r@{}}
+    \begin{minipage}[l]{#1\linewidth} #2 \end{minipage} &
+    \begin{minipage}[c]{.15\linewidth} #3 \end{minipage} &
+    \begin{minipage}[r]{\colwidth} #4 \end{minipage} \\
+  \end{tabular}
+}
+% define a custom block environment with a dynamic title
+%  source: https://tex.stackexchange.com/questions/202356/redefine-beamers-blocks
+\newtcbox{\titlebox}{
+  enhanced,
+  colback=gray!50,
+  top=-1pt,bottom=-2pt,left=2pt,right=2pt,
+  boxrule=1pt,
+  colframe=gray!50,
+  sharp corners=south,
+  colupper=white,
+  fontupper=\bfseries
+}
+\newtcolorbox{myblock}[2][]{
+  enhanced,
+  drop fuzzy shadow,
+  left=2pt,
+  right=2pt,
+  colframe=gray!50,
+  boxrule=1pt,
+  colback=gray!10,
+  fontupper=\footnotesize,
+  overlay={
+    \def\myblock@tempa{#2}
+    \ifx\myblock@tempa\@empty\else
+      \draw[gray!50,fill=gray!50]($(frame.north west)+(.2pt,-.2pt)$)--+(.1,0)to[bend right]+(-0,-.1)--cycle;
+      \node[anchor=south west,inner sep=0pt,outer sep=0pt]at(frame.north west){\titlebox{\scriptsize #2}};
+    \fi
+  },
+  #1
+}
+\newtcolorbox{myblock2}[1][]{
+  enhanced,
+  left=0pt,
+  right=0pt,
+  colframe=white,
+  boxrule=1pt,
+  colback=white,
+  fontupper=\footnotesize,
+  #1
+}

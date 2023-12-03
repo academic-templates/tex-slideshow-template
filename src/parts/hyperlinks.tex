@@ -1,0 +1,30 @@
+% key-value handling
+\def\newhyperlink#1#2#3{
+  \expandafter\gdef\csname my@data@\detokenize{link:#1}\endcsname{\href{#3}{#2}}
+  \expandafter\gdef\csname my@data@\detokenize{link2:#1}\endcsname{\url{#3}}
+}
+\def\link#1{%
+  \ifcsname my@data@\detokenize{link:#1}\endcsname
+    \csname my@data@\detokenize{link:#1}\expandafter\endcsname
+  \else
+    \expandafter\ERROR
+  \fi
+}
+\def\linklong#1{%
+  \ifcsname my@data@\detokenize{link:#1}\endcsname
+    \csname my@data@\detokenize{link2:#1}\expandafter\endcsname
+  \else
+    \expandafter\ERROR
+  \fi
+}
+\def\linknote#1{%
+  \ifcsname my@data@\detokenize{link:#1}\endcsname
+    \csname my@data@\detokenize{link:#1}\expandafter\endcsname
+    \footnote{\tiny \linklong{#1}}
+  \else
+    \expandafter\ERROR
+  \fi
+}
+
+% list of hyperlinks
+\newhyperlink{example}{Example website}{https://www.example.com}

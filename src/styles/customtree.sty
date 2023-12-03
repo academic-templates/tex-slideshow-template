@@ -1,0 +1,63 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{styles/customtree}[2016/08/30 Custom tree package]
+\RequirePackage{geometry}
+\RequirePackage{forest}
+% source: http://tex.stackexchange.com/questions/253364/how-to-modify-forest-nodes-in-beamer-overlays
+% define Tikz settings
+%\tikzset{% set up for transitions using tikz with beamer overlays
+%  invisible/.style={opacity=0,text opacity=0},
+%  visible on/.style={alt=#1{}{invisible}},
+%  alt/.code args={<#1>#2#3}{%
+%    \alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+%  },
+%  transparent/.style={opacity=0.1,text opacity=0.1},
+%  opaque on/.style={alt=#1{}{transparent}},
+%  alerted/.style={color=alerttextdefaultfg},
+%  alert on/.style={alt=#1{alerted}{}},
+%}
+% define forest settings
+\forestset{%
+  dir tree/.style={%
+  for tree={
+    if level=0 {
+      font=\sffamily\scriptsize,
+      fill=customdarkblue,
+      minimum width=3cm,
+      minimum height=0.4cm,
+      s sep=7pt,
+    }{
+      font=\sffamily\tiny,
+      fill=customlightblue,
+      minimum width=1.5cm,
+      minimum height=0.3cm,
+      outer ysep=-6pt,
+    },
+    text=white,
+    rounded corners=2pt,
+    parent anchor=south west,
+    child anchor=west,
+    anchor=mid west,
+    inner ysep=0pt,
+    grow'=0,
+    align=left,
+    edge={rounded corners=2pt},
+    edge path={
+      \noexpand\path [draw, \forestoption{edge}] (!u.parent anchor) ++(10pt,0pt) |- (.child anchor)\forestoption{edge label};
+    },
+    if n children=0{}{delay={prepend={[,phantom, calign with current]}}},
+    fit=band,
+    before typesetting nodes={
+      if n=1 {insert before={[,phantom]}}{}
+    },
+    before computing xy={l=20pt},
+  }},
+  small node/.style={for tree={if level=0 {}{text width=1.5cm}}},
+  medium node/.style={for tree={if level=0 {}{text width=2cm}}},
+  large node/.style={for tree={if level=0 {}{text width=3cm}}},
+  legend/.style={
+    for tree={
+      font=\sffamily\tiny,
+      fill=customlightblue,
+    }
+  }
+}

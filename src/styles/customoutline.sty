@@ -1,0 +1,60 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{styles/customoutline}[2016/08/26 Custom outline frame package]
+\RequirePackage{graphicx}
+% define underlying functions
+\makeatletter
+\def\currentsectiontitle{\@currentlabelname}
+\makeatother
+\newcommand{\outlineimage}{
+  \edef\tempfilename{figures/outline-\currentsectiontitle}
+  \IfFileExists{\tempfilename.png}{
+    \begin{figure}
+      \centering
+      \includegraphics[width=.9\linewidth]{\tempfilename}
+    \end{figure}
+  }{}
+  \IfFileExists{\tempfilename.txt}{
+    \begingroup
+    \obeylines
+    \itshape \footnotesize
+    \input{\tempfilename.txt}%
+    \endgroup%
+  }{}
+}
+% title frame definition
+\newcommand{\titleandoutline}{
+  \begingroup
+  \setbeamertemplate{headline}{}
+  \setbeamertemplate{footline}{}
+  \setbeamertemplate{navigation symbols}{}
+  \frame{\titlepage}
+  \endgroup
+  \addtocounter{framenumber}{-2}
+  \frame{
+    \frametitle{Outline}
+    \centering
+    \vspace{-.5cm}
+    \begin{minipage}{0.35\textwidth}
+    \tableofcontents[hidesubsections]
+    \end{minipage}
+  }
+  \outlineframe
+}
+% outline frame for section beginning
+\newcommand{\outlineframe}{
+  \AtBeginSection[] {
+    \framelogo{}
+    \frame<handout:0> {
+      \addtocounter{framenumber}{-1}
+      \frametitle{Outline}
+      \centering
+      \vspace{-.5cm}
+      \begin{tabular}{L{.4\linewidth}R{.4\linewidth}@{}}
+        \setlength{\parskip}{0.3ex}
+        \tableofcontents[currentsection,hideothersubsections] &
+        \outlineimage
+        \\
+      \end{tabular}
+    }
+  }
+}

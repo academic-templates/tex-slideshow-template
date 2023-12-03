@@ -1,0 +1,92 @@
+\NeedsTeXFormat{LaTeX2e}
+%%
+\ProvidesPackage{styles/presentation}[2016/06/25 Miscellaneous package]
+\RequirePackage[english]{babel}
+\RequirePackage[utf8]{inputenc}
+\RequirePackage{thumbpdf}
+\RequirePackage{wasysym}
+%\RequirePackage{pgf,pgfarrows,pgfnodes,pgfautomata,pgfheaps,pgfshade}
+\RequirePackage{graphicx}
+\RequirePackage{tikz}
+\RequirePackage{verbatim}
+\RequirePackage{animate}
+\RequirePackage{etoolbox}
+\RequirePackage{xpatch}
+\RequirePackage{setspace}
+\RequirePackage{booktabs}
+\RequirePackage[most]{tcolorbox}
+\RequirePackage{listings}
+\RequirePackage{pdfpages} % for \includepdf
+\RequirePackage{appendixnumberbeamer}
+\RequirePackage[backend=bibtex,natbib=true,citestyle=numeric-comp,sorting=none,doi=false,url=false,eprint=false]{biblatex}
+%\RequirePackage[numbers,sort&compress]{natbib}
+\RequirePackage[font=footnotesize,textfont=footnotesize,labelfont=bf]{caption}
+\RequirePackage{hanging}
+\RequirePackage{multicol}
+%\RequirePackage{enumitem}  %% NEVER enable 'enumerate' and 'enumitem' at the same time, it will throw error "TeX capacity exceeded"
+\RequirePackage{changepage}
+\RequirePackage{ragged2e}
+% Tikz configuration
+\usetikzlibrary{arrows,calc,decorations.pathmorphing,backgrounds,fit,positioning,shapes.symbols,chains}
+% custom packages -- WARNING: import order matters !!!
+\def\supertiny{\fontsize{5}{6}\selectfont}
+\def\microtiny{\fontsize{3}{4}\selectfont}
+\RequirePackage{styles/customcolors}
+\RequirePackage{styles/customtheme}
+\RequirePackage{styles/customoutline}
+\RequirePackage{styles/customtable}
+\RequirePackage{styles/customframe}
+\RequirePackage{styles/customblocks}
+\RequirePackage{styles/customtree}
+\RequirePackage{styles/progressbar}
+\RequirePackage{hyperref}
+% Beamer settings
+\makeatletter
+\patchcmd{\beamer@sectionintoc}{\vskip1.5em}{\vskip1em}{}{}
+\makeatother
+\setbeamertemplate{bibliography item}{\insertbiblabel}
+\setbeamerfont{caption}{size=\tiny}
+% bibliography settings
+\addbibresource{parts/bibliography.bib}
+% miscellaneous declarations
+\newcommand<>{\highlighton}[1]{\alt#2{\structure{#1}}{{#1}}}
+\newcommand{\icon}[2][height=4pt]{\includegraphics[#1]{#2}}
+\newcommand{\dataset}[2]{\parbox[c]{3cm}{\centering \textit{#1} \\ {\tiny #2}}}
+% image settings
+\graphicspath{{figures/},{demos/},{icons/},{logos/}}
+\DeclareGraphicsExtensions{.jpg,.jpeg,.gif,.png,.pdf}
+% remove the heading line once \appendix is called
+\newcommand{\appendices}{
+  \makeatletter
+  \setbeamertemplate{headline}{}
+  \addtobeamertemplate{frametitle}{\vspace*{-2.7\baselineskip}}{}
+  \makeatother
+}
+% format footnotes
+\makeatletter   
+\def\footnoterule{\kern-3\p@ \hbox{\tikz \fill[left color=gray!50!white, right color=white] (0,0) rectangle (\linewidth,.3pt);} \kern 2\p@}                                                              
+%\def\footnoterule{\kern-6\p@ \color{gray}\hrule \@width \linewidth \kern 2\p@}
+\makeatother
+\renewcommand\thefootnote{\color{gray}\textbf{\arabic{footnote}}}
+\renewcommand\thempfootnote{\color{gray}\textbf{\arabic{mpfootnote}}}
+\setlength{\footnotesep}{2pt}
+%\let\oldfootnote\footnote
+%\renewcommand\footnote[1][]{\oldfootnote[frame,#1]}
+\setbeamertemplate{footnote}{%
+  \noindent%
+  \raggedright\linespread{.5}\color{gray}\microtiny%
+  \hbox to 0em{\insertfootnotemark}\quad\parbox[t]{.9\textwidth}{\insertfootnotetext}\par%
+}
+\addtobeamertemplate{footnote}{\hsize\linewidth}{}
+% if counter exists command
+% source: http://tex.stackexchange.com/questions/155776/check-if-counter-exists
+\makeatletter
+\newcommand*\ifcounter[1]{%
+  \ifcsname c@#1\endcsname \expandafter\@firstoftwo \else \expandafter\@secondoftwo \fi
+}
+\makeatother
+% helper for hyphenation
+\def\hy#1{\parbox{\linewidth}{#1}}
+% circle-bulleted reference
+\newcommand{\circled}[2][blue!50]{\scalebox{0.7}{\tikz\node[outer sep=0pt, inner sep=1pt,circle,shading=ball,text=white,ball color=#1]{#2};}}
+\newcommand{\bref}[2][green!80!black]{\circled[#1]{\ref{#2}}}
